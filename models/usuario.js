@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const secret = require("../config").secret;
 
 const UsuarioSchema = new mongoose.Schema({
-  nome: {
+  name: {
     type: String,
     required: [true, "não pode ficar vazio."]
   },
@@ -57,7 +57,7 @@ UsuarioSchema.methods.gerarToken = function(){
 
   return jwt.sign({
     id: this._id,
-    nome: this.nome,
+    name: this.name,
     email: this.email,
     exp: parseFloat(exp.getTime() / 1000, 10)
   }, secret);
@@ -66,7 +66,7 @@ UsuarioSchema.methods.gerarToken = function(){
 UsuarioSchema.methods.enviarAuthJSON = function(){
   return {
     _id: this._id,
-    nome: this.nome,
+    name: this.name,
     email: this.email,
     loja: this.loja,
     role: this.permissao,
@@ -75,7 +75,7 @@ UsuarioSchema.methods.enviarAuthJSON = function(){
 };
 
 // recuperação
-UsuarioSchema.method.criarTokenRecuperacaoSenha = function(){
+UsuarioSchema.methods.criarTokenRecuperacaoSenha = function(){
   this.recovery = {};
   this.recovery.token = crypto.randomBytes(16).toString("hex");
   this.recovery.date = new Date( new Date().getTime() + 24*60*60*1000 );

@@ -14,14 +14,14 @@ class UsuarioController {
 
   // get /:id
   show(req, res, next){
-    Usuario.findById(req.params.id).populate({path: "loja"})
+    Usuario.findById(req.params.id) //.populate({path: "loja"})
     .then(usuario => {
       if(!usuario) return res.status(401).json({errors: "Usuario não registrado"});
       return res.json({
         usuario: {
-          nome: usuario.nome,
+          name: usuario.name,
           email: usuario.email,
-          permission: usuario.permission,
+          permissao: usuario.permissao,
           loja: usuario.loja
         }
       });
@@ -30,10 +30,10 @@ class UsuarioController {
 
   // post /registrar
   store(req, res, next){
-    const { nome, email, password, loja } = req.body;
-    if(!nome || !email || !password || !loja ) return res.status(422).json({ errors: "Preencha todos os campos de cadastro" });
+    const { name, email, password, loja } = req.body;
+    if(!name || !email || !password || !loja ) return res.status(422).json({ errors: "Preencha todos os campos de cadastro" });
 
-    const usuario = new Usuario({ nome, email, loja});
+    const usuario = new Usuario({ name, email, loja});
     usuario.setSenha(password);
 
     usuario.save()
@@ -46,10 +46,10 @@ class UsuarioController {
 
   // put
   update(req, res, next){
-    const { nome, email, password} = req.body;
+    const { name, email, password} = req.body;
     Usuario.findById(req.payload.id).then((usuario) => {
       if(!usuario) return res.status(401).json({errors: "Usuario não registrado" });
-      if(typeof nome !== "undefined") usuario.nome = nome;
+      if(typeof name !== "undefined") usuario.name = name;
       if(typeof email !== "undefined") usuario.email = email;
       if(typeof password !== "undefined") usuario.setSenha(password);
 
@@ -96,8 +96,9 @@ class UsuarioController {
       if(!usuario) return res.render("recovery", { error: "Não existe usuário com este email", success: null });
       const recoveryData = usuario.criarTokenRecuperacaoSenha();
       return usuario.save().then(() =>{
-        enviarEmailRecovery({ usuario, recovery: recoveryData}, (error = null, success = null));
+        enviarEmailRecovery({ usuario, recovery: recoveryData}, (error = null, success = null) =>{
           return res.render("recovery", { error, success});
+        });
       }).catch(next);
     }).catch(next);
   }
@@ -119,14 +120,14 @@ class UsuarioController {
     Usuario.findOne({ "recovery.token": token }).then(usuario => {
       if(!usuario) return res.render("recovery", { error: "Usuario não identificado", success: null});
 
-      usuario.finalizarTokenRecuperacao();
+      usuario.finalizarTokenRecuperacaoSenha();
       usuario.setSenha(password);
       return usuario.save().then(() => {
         return res.render("recovery/store", {
           error: null,
           success: "Senha alterada com sucesso. Tente novamente fazer login.",
           token: null
-        })
+        });
       }).catch(next);
     })
   }

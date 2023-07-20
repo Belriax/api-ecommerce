@@ -1,5 +1,5 @@
 const transporter = require("nodemailer").createTransport(require("../config/email"));
-const { root: link } = require("../config/index");
+const { api: link } = require("../config/index");
 
 module.exports = ({ usuario, recovery }, cb) => {
   const message = `
@@ -14,7 +14,7 @@ module.exports = ({ usuario, recovery }, cb) => {
     </a>
     <br/> <br/> <hr/>
     <p>
-      Obs: Se você não solicitou a redefinicao, apensa ignore esse email.
+      Obs: Se você não solicitou a redefinicao, apenas ignore esse email.
     </p>
     <br/>
     <p>Atenciosamente, Loja T.I</p>
