@@ -1,6 +1,6 @@
 const BaseJoi = require('joi');
-const Extesion = require('joi-date-extensions');
-const Joi = BaseJoi.extend(Extesion);
+const Extension = require('joi-date-extensions');
+const Joi = BaseJoi.extend(Extension);
 
 const UsuarioValidation = {
   show:{
@@ -20,7 +20,7 @@ const UsuarioValidation = {
     body: {
       nome: Joi.string().optional(),
       email: Joi.string().email().optional(),
-      password: Joi.string().optional(),
+      password: Joi.string().optional()
     }
   },
   login: {

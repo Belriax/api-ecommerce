@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
+const Usuario = mongoose.model("Usuario");
+const Loja = mongoose.model("Loja");
+
 const BaseJoi = require('joi');
 const Extension = require('joi-date-extensions');
 const Joi = BaseJoi.extend(Extension);
 
-const Usuario = mongoose.model("Usuario");
-const Loja = mongoose.model("Loja");
-
-const LojaValdation = {
+const LojaValidation = {
   admin: (req, res, next) => {
     if(!req.payload.id) return res.sendStatus(401);
     const { loja } = req.query;
@@ -25,7 +25,7 @@ const LojaValdation = {
     }
   },
   store: {
-    body:{
+    body: {
       nome: Joi.string().required(),
       cnpj: Joi.string().length(18).required(),
       email: Joi.string().email().required(),
@@ -59,5 +59,4 @@ const LojaValdation = {
   }
 }
 
-
-module.exports = { LojaValdation };
+module.exports = { LojaValidation };
