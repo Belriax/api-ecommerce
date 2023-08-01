@@ -3,7 +3,7 @@ const Usuario = mongoose.model("Usuario");
 const enviarEmailRecovery = require("../helpers/email-recovery");
 
 class UsuarioController {
-  
+
   // get
   index(req, res, next){
     Usuario.findById(req.payload.id).then(usuario => {
@@ -31,8 +31,6 @@ class UsuarioController {
   // post /registrar
   store(req, res, next){
     const { name, email, password, loja } = req.body;
-    if(!name || !email || !password || !loja ) return res.status(422).json({ errors: "Preencha todos os campos de cadastro" });
-
     const usuario = new Usuario({ name, email, loja});
     usuario.setSenha(password);
 
