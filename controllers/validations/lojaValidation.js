@@ -45,7 +45,7 @@ const LojaValidation = {
       nome: Joi.string().optional(),
       cnpj: Joi.string().length(18).optional(),
       email: Joi.string().email().optional(),
-      telefones: Joi.array().items(Joi.string()).required(),
+      telefones: Joi.array().items(Joi.string()).optional(),
       endereco: Joi.object({
         local: Joi.string().required(),
         numero: Joi.string().required(),
