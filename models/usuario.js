@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const secret = require("../config").secret;
 
 const UsuarioSchema = new mongoose.Schema({
-  name: {
+  nome: {
     type: String,
     required: [true, "não pode ficar vazio."]
   },
@@ -57,7 +57,7 @@ UsuarioSchema.methods.gerarToken = function(){
 
   return jwt.sign({
     id: this._id,
-    name: this.name,
+    nome: this.nome,
     email: this.email,
     exp: parseFloat(exp.getTime() / 1000, 10)
   }, secret);
@@ -66,7 +66,7 @@ UsuarioSchema.methods.gerarToken = function(){
 UsuarioSchema.methods.enviarAuthJSON = function(){
   return {
     _id: this._id,
-    name: this.name,
+    nome: this.nome,
     email: this.email,
     loja: this.loja,
     role: this.permissao,

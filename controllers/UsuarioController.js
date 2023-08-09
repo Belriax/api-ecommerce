@@ -19,7 +19,7 @@ class UsuarioController {
       if(!usuario) return res.status(401).json({errors: "Usuario não registrado"});
       return res.json({
         usuario: {
-          name: usuario.name,
+          nome: usuario.nome,
           email: usuario.email,
           permissao: usuario.permissao,
           loja: usuario.loja
@@ -30,8 +30,8 @@ class UsuarioController {
 
   // post /registrar
   store(req, res, next){
-    const { name, email, password, loja } = req.body;
-    const usuario = new Usuario({ name, email, loja});
+    const { nome, email, password, loja } = req.body;
+    const usuario = new Usuario({ nome, email, loja});
     usuario.setSenha(password);
 
     usuario.save()
@@ -44,10 +44,10 @@ class UsuarioController {
 
   // put
   update(req, res, next){
-    const { name, email, password} = req.body;
+    const { nome, email, password} = req.body;
     Usuario.findById(req.payload.id).then((usuario) => {
       if(!usuario) return res.status(401).json({errors: "Usuario não registrado" });
-      if(typeof name !== "undefined") usuario.name = name;
+      if(typeof nome !== "undefined") usuario.nome = nome;
       if(typeof email !== "undefined") usuario.email = email;
       if(typeof password !== "undefined") usuario.setSenha(password);
 

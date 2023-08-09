@@ -11,7 +11,7 @@ router.get("/", lojaController.index); // testado
 router.get("/:id", Validation(LojaValidation.show), lojaController.show);// testado
 
 router.post("/", auth.required, Validation(LojaValidation.store), lojaController.store);// testado
-router.put("/:id", auth.required, LojaValidation.admin, Validation(LojaValidation.update), lojaController.update);
-router.delete("/:id", auth.required, LojaValidation.admin, Validation(LojaValidation.remove), lojaController.remove);
+router.put("/:id", auth.required, LojaValidation.admin, Validation(LojaValidation.update), lojaController.update);// testado
+router.delete("/:id", auth.required, LojaValidation.admin, lojaController.remove);// testado
 
 module.exports = router;
