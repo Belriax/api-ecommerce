@@ -14,7 +14,7 @@ class UsuarioController {
 
   // get /:id
   show(req, res, next){
-    Usuario.findById(req.params.id) //.populate({path: "loja"})
+    Usuario.findById(req.params.id).populate({path: "loja"})
     .then(usuario => {
       if(!usuario) return res.status(401).json({errors: "Usuario não registrado"});
       return res.json({
@@ -70,8 +70,7 @@ class UsuarioController {
   // post /login
   login(req, res, next){
     const {email, password} = req.body;
-    if(!email) return res.status(422).json({ errors: {email: "não pode ficar vazio"}});
-    if(!password) return res.status(422).json({ errors: {password: "não pode ficar vazio"}});
+
     Usuario.findOne({ email }).then((usuario) => {
       if(!usuario) return res.status(401).json({ errors: "Usuario não registrado" });
       if(!usuario.validarSenha(password)) return res.status(401).json({ errors: "Senha inválida" });
