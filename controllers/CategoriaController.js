@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const Categoria = mongoose.model("Categoria");
+const Produto = mongoose.model("Produto");
 
 class CategoriaController {
   // GET/ index
@@ -42,9 +43,9 @@ class CategoriaController {
   // PUT /:id update
   async update(req, res, next){
     const { nome, codigo, disponibilidade, produtos} = req.body;
+    const categoria = await Categoria.findById(req.params);
     
     try {
-      const categoria = await Categoria.findById(req.params.id);
 
       if(nome) categoria.nome = nome;
       if(disponibilidade !== undefined) categoria.disponibilidade = disponibilidade;
@@ -72,6 +73,60 @@ class CategoriaController {
   /**
    * PRODUTOS
    */
+  // GET /:id/produtos - showProdutos
+  async showProdutos(req, res, next){
+    const { offset, limit } = req.query;
+    try{
+      const produtos = await Produto.paginate(
+        { categoria: req.params.id },
+        { offset: Number(offset) || 0, limit: Number(limit) || 30 }
+      );
+
+      return res.send({ produtos });
+
+    }catch(err){
+      next(err);
+    }
+  }
+
+  // PUT /:id - updateProdutos
+  async updateProdutos(req, res, next){
+    try {
+      const categoria = await Categoria.findById(req.params.id)
+      const { produtos } = req.body;
+      if(produtos) categoria.produtos = produtos;
+      await categoria.save();
+
+      let _produtos = await Produto.find({
+        $or: [
+          { categoria: req.params.id },
+          { _id: { $in: produtos } }
+        ]
+      });
+      _produtos = await Promise.all(_produtos.map(async (produto) => {
+        if(!produtos.includes(produto._id.toString())){
+          produto.categoria = null;
+          await produto.save();
+        }else{
+          produto.categoria = req.params.id;
+        }
+        await produto.save();
+        return produto;
+      }));
+
+      const resultado = await Produto.paginate(
+        { categoria: req.params.id },
+        { offset: 0, limit: 30}
+      );
+      return res.send({ resultado })
+
+
+
+    } catch (err) {
+      next(err)
+    }
+  }
+
 }
 
 module.exports = CategoriaController;
