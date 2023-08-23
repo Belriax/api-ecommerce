@@ -1,7 +1,9 @@
-require("./loja");
+require('./loja');
 
-require("./usuario");
-require("./cliente");
+require('./usuario');
+require('./cliente');
 
 require('./categoria');
 require('./produto');
+require('./avaliacoes');
+require('./variacao');
