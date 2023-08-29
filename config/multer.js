@@ -5,6 +5,6 @@ const storage = multer.diskStorage({
   filename: (req, file, callback) => callback(null, file.fieldname + '-' + Date.now() + '.jpg' )
 });
 
-const upload = multer({ storage});
+const upload = multer({ storage });
 
 module.exports = upload;

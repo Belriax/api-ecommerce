@@ -9,5 +9,6 @@ router.use("/categorias", require("./categorias"));
 router.use("/produtos", require("./produtos"));
 router.use("/avaliacoes", require("./avaliacoes"));
 router.use("/variacoes", require("./variacoes"));
+router.use("/pedidos", require("./pedidos"));
 
 module.exports = router;

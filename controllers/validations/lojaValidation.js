@@ -17,7 +17,7 @@ const LojaValidation = {
       if(!usuario.permissao.includes("admin")) return res.sendStatus(401);
       if(usuario.loja.toString() !== loja) return res.sendStatus(401);
       next()
-    }).catch(next)
+    }).catch(next);
   },
   show: {
     params: {
