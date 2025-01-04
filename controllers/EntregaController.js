@@ -49,7 +49,7 @@ class EntregaController {
     }
   }
 
-  // GET /calcular
+  // POST /calcular
   async calcular(req, res, next){
     const { cep, carrinho} = req.body;
     try {

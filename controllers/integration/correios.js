@@ -20,21 +20,36 @@ const calcularFrete = async ({ cep, produtos }) => {
   const valorFinal = _produtos.reduce((all, item) => all + ( item.preco * item.quantidade), 0);
 
   try {
+      // const resultados = await correios.calcPrecoPrazo({
+      //   nCdEmpresa: "50268833000106",
+      //   sdsSenha: "nLWdOao11auz7MekG6nAQCq9r7BXIAhImBvYLcsv",
+      //   nCdServico: config.nCdServico,
+      //   sCepOrigem: config.sCepOrigem,
+      //   sCepDestino: cep,
+      //   nVlPeso: pesoTotal,
+      //   nCdFormato: 1,
+      //   nVlComprimento: caixa.comprimento,
+      //   nVlAltura: caixa.altura,
+      //   nVlLargura: caixa.largura,
+      //   nVlDiamentro: 0,
+      //   nVlValorDeclarado: valorFinal < 20.5 ? 20.5 : valorFinal
+      // });
     const resultados = await Promise.all(
       config.nCdServico.split(',').map(async(servico)=>{
-          const resultado = await correios.calcPrecoPrazo({            
-              nCdServico: servico,
-              sCepOrigem: config.sCepOrigem,
-              sCepDestino: cep,
-              nVlPeso: pesoTotal,
-              nCdFormato: 1,
-              nVlComprimento: caixa.comprimento,
-              nVlAltura: caixa.altura,
-              nVlLargura: caixa.largura,
-              nVlDiamentro: 0,
-              nVlValorDeclarado: valorFinal < 19.5 ? 19.5 : valorFinal
+          const resultado = await correios.calcPrecoPrazo({
+            nCdServico: servico,
+            sCepOrigem: config.sCepOrigem,
+            sCepDestino: cep,
+            nVlPeso: pesoTotal,
+            nCdFormato: 1,
+            nVlComprimento: caixa.comprimento,
+            nVlAltura: caixa.altura,
+            nVlLargura: caixa.largura,
+            nVlDiamentro: 0,
+            nVlValorDeclarado: valorFinal < 20.5 ? 20.5 : valorFinal
           });
           return { ...resultado[0] };
+          // console.log(resultado);
       })
   );
   return resultados;

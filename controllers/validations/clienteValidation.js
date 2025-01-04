@@ -9,7 +9,7 @@ const ClienteValidation = {
       limit: Joi.number()
     }
   },
-  search: {
+  searchPedidos: {
     query: {
       offset: Joi.number(),
       limit: Joi.number()
@@ -18,7 +18,7 @@ const ClienteValidation = {
       search: Joi.string().required()
     }
   },
-  searchPedidos: {
+  search: {
     query: {
       offset: Joi.number(),
       limit: Joi.number()

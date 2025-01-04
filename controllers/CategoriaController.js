@@ -43,7 +43,7 @@ class CategoriaController {
   // PUT /:id update
   async update(req, res, next){
     const { nome, codigo, disponibilidade, produtos} = req.body;
-    const categoria = await Categoria.findById(req.params);
+    const categoria = await Categoria.findById(req.params.id);
     
     try {
 

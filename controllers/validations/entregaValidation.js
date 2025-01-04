@@ -34,8 +34,8 @@ const EntregaValidation = {
       carrinho: Joi.array().items(Joi.object({
         produto: Joi.string().alphanum().length(24).required(),
         variacao: Joi.string().alphanum().length(24).required(),
-        precoUnitario: Joi.number().required(),
-        quantidade: Joi.number().required()
+        precoUnitario: Joi.number().optional(),
+        quantidade: Joi.number().optional()
       })).required()
     }
   }
@@ -64,4 +64,4 @@ const checarValorPrazo = async( cep, carrinho, entrega) => {
   }
 };
 
-module.exports = { EntregaValidation };
+module.exports = { EntregaValidation, checarValorPrazo };

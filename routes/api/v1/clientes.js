@@ -11,9 +11,8 @@ const clienteController = new ClienteController();
 router.get("/", auth.required, LojaValidation.admin, Validation(ClienteValidation.index), clienteController.index);
 router.get("/search/:search/pedidos", auth.required, LojaValidation.admin, Validation(ClienteValidation.searchPedidos), clienteController.searchPedidos);
 router.get("/search/:search", auth.required, LojaValidation.admin, Validation(ClienteValidation.search), clienteController.search);
-
 router.get("/admin/:id", auth.required, LojaValidation.admin, Validation(ClienteValidation.showAdmin), clienteController.showAdmin);
-router.get("admin/:id/pedidos", auth.required, LojaValidation.admin, Validation(ClienteValidation.showPedidosCliente), clienteController.showPedidosCliente);
+router.get("/admin/:id/pedidos", auth.required, LojaValidation.admin, Validation(ClienteValidation.showPedidosCliente), clienteController.showPedidosCliente);
 router.put("/admin/:id", auth.required, LojaValidation.admin, Validation(ClienteValidation.updateAdmin), clienteController.updateAdmin);
 
 // PERMISSÕES CLIENTES

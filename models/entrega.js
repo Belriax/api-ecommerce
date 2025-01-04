@@ -18,7 +18,7 @@ const EntregaSchema = Schema({
       estado: { type: String, required: true },
       CEP: { type: String, required: true },
     },
-    required: true
+    // required: true
   },
   pedido: { type: Schema.Types.ObjectId, ref: "Pedido", required: true },
   loja: { type: Schema.Types.ObjectId, ref: "Loja", required: true },

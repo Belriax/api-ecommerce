@@ -8,8 +8,8 @@ const Entrega = mongoose.model("Entrega");
 const Cliente = mongoose.model("Cliente");
 const RegistroPedido = mongoose.model("RegistroPedido");
 
-const { calcularFrete } = require('./integration/correios');
 const EntregaValidation = require('./validations/entregaValidation');
+const PagamentoValidation = require('./validations/pagamentoValidation');
 
 const CarrinhoValidation = require("./validations/carrinhoValidation");
 
@@ -68,6 +68,8 @@ class PedidoController {
         tipo: "pedido",
         situacao: "pedido_cancelado"
       });
+
+      await registroPedido.save();
       // Registro de atividades = pedido cancelado
       // Enviar email para cliente = pedido cancelado
 
@@ -134,7 +136,7 @@ class PedidoController {
       const registros = await RegistroPedido.find({pedido: pedido._id});
 
       // const resultado = await calcularFrete({ cep: "68515000", produtos: pedido.carrinho });
-      return res.send({ pedido });
+      return res.send({ pedido, registros });
     } catch (err) {
       next(err)
     }
@@ -155,16 +157,18 @@ class PedidoController {
       if(!await EntregaValidation.checarValorPrazo(cliente.endereco.CEP, carrinho, entrega)) return res.status(422).send({error: "Dados de entrega inválido"});
 
       // CHECAR DADOS DO PAGAMENTO
-      // if(!await PagamentoValidation(carrinho, pagamento)) return res.status(422).send({error: "Dados de pagamento inválido"});
+      // if(!await PagamentoValidation.checarValorTotal({carrinho, entrega, pagamento})) return res.status(422).send({error: "Dados de pagamento inválido"});
+      // if(!PagamentoValidation.checarCartao({carrinho, entrega, pagamento})) return res.status(422).send({error: "Dados de pagamento com cartão inválidos"});
 
       const novoPagamento = new Pagamento({
         valor: pagamento.valor,
-        parecelas: pagamento.parecelas || 1,
+        parcelas: pagamento.parcelas || 1,
         forma: pagamento.forma,
         status: "iniciando",
         endereco: pagamento.endereco,
         cartao: pagamento.cartao,
         enderecoEntregaIgualCobranca: pagamento.enderecoEntregaIgualCobranca,
+        // payload: pagamento,
         loja
       });
 
@@ -174,6 +178,7 @@ class PedidoController {
         prazo: entrega.prazo,
         tipo: entrega.tipo,
         endereco: entrega.endereco,
+        // payload: entrega,
         loja
       });
 
