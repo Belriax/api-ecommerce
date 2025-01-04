@@ -2,10 +2,10 @@
 const express = require("express");
 const compression = require("compression");
 const ejs = require("ejs");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
+const path = require("path");
 
 // start
 const app = express();
@@ -15,13 +15,18 @@ const isProduction = process.env.NODE_ENV === "production";
 const PORT = process.env.PORT || 3000;
 
 // arquivos estaticos
-app.use("/public", express.static(__dirname + "/public"));
-app.use("/public/images", express.static(__dirname + "/images"));
+// app.use("/public", express.static(__dirname + "/public"));
+// app.use("/public/images", express.static(__dirname + "/images"));
+app.use("/public", express.static(path.join(__dirname, "public")));
+app.use("/public/images", express.static(path.join(__dirname, "images")));
+
 
 // setup mongoDB
 const dbs = require("./config/database");
 const dbURI = isProduction ? dbs.dbProduction : dbs.dbTest;
-mongoose.connect(dbURI, { useNewUrlParser: true });
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("MongoDB conectado com sucesso!"))
+  .catch((err) => console.error("Erro ao conectar ao MongoDB:", err));
 
 // setup EJS
 app.set("view engine", "ejs");

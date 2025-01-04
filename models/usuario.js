@@ -1,6 +1,5 @@
 const mongoose = require("mongoose"),
       Schema = mongoose.Schema;
-const uniqueValidator = require("mongoose-unique-validator");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const secret = require("../config").secret;
@@ -38,7 +37,7 @@ const UsuarioSchema = new mongoose.Schema({
   }
 },{ timestamps: true});
 
-UsuarioSchema.plugin(uniqueValidator, {message: "Já está sendo utilizado"});
+// UsuarioSchema.plugin(uniqueValidator, {message: "Já está sendo utilizado"});
 
 UsuarioSchema.methods.setSenha = function(password){
   this.salt = crypto.randomBytes(16).toString("hex");

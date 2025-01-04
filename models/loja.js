@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const uniqueValidator = require("mongoose-unique-validator");
 
 const LojaSchema = mongoose.Schema({
   nome: { type: String, required : true},
@@ -21,6 +20,15 @@ const LojaSchema = mongoose.Schema({
   }
 }, {timestamps: true});
 
-LojaSchema.plugin(uniqueValidator, { message: "Já está sendo utilizado!"});
+// LojaSchema.plugin(uniqueValidator, { message: "Já está sendo utilizado!"});
+LojaSchema.pre("save", async function(next) {
+  const existeLoja = await mongoose.models.Loja.findOne({cnpj: this.cnpj});
+  if(existeLoja) {
+    const error = new Error("CNPJ já está sendo utilizado!");
+    error.name = "ValidationError";
+    return next(error);
+  }
+  next();
+})
 
 module.exports = mongoose.model("Loja", LojaSchema);
