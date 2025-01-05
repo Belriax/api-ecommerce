@@ -38,6 +38,14 @@ const UsuarioSchema = new mongoose.Schema({
 },{ timestamps: true});
 
 // UsuarioSchema.plugin(uniqueValidator, {message: "Já está sendo utilizado"});
+UsuarioSchema.pre("save", async function(next) {
+  const existeUsuario = await mongoose.models.Usuario.findOne({usuario: this.usuario});
+  if(existeUsuario) {
+    const error = new Error("Usuário já cadastrado!");
+    error.name = "ValidationError";
+    return next(error);
+  }  
+})
 
 UsuarioSchema.methods.setSenha = function(password){
   this.salt = crypto.randomBytes(16).toString("hex");

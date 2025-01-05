@@ -1,5 +1,5 @@
 const BaseJoi = require('joi');
-const Extension = require('joi-date-extensions');
+const Extension = require('@joi/date');
 const Joi = BaseJoi.extend(Extension);
 
 const UsuarioValidation = {

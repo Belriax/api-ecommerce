@@ -1,5 +1,5 @@
 const mongoose = require("mongoose"),
-  mongoosePaginate = require("mongoose-paginate"),
+  mongoosePaginate = require("mongoose-paginate-v2"),
   Schema = mongoose.Schema;
 
 const EntregaSchema = Schema({
